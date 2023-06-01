@@ -1,0 +1,11 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<Configuration>
+	<NameFirstCompanyXml>Microsoft</NameFirstCompanyXml>
+	<NumberOfEmployeesFirstCompanyXml>12567</NumberOfEmployeesFirstCompanyXml>
+
+	<NameSecondCompanyXml>Apple</NameSecondCompanyXml>
+	<NumberOfEmployeesSecondCompanyXml>27000</NumberOfEmployeesSecondCompanyXml>
+
+	<NameThirdCompanyXml>Google</NameThirdCompanyXml>
+	<NumberOfEmployeesThirdCompanyXml>16906</NumberOfEmployeesThirdCompanyXml>
+</Configuration>
