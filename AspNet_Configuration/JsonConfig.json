@@ -1,0 +1,26 @@
+{
+	"NameFirstCompanyJson": "Microsoft",
+	"NumberOfEmployeesFirstCompanyJson": 12567,
+
+	"NameSecondCompanyJson": "Apple",
+	"NumberOfEmployeesSecondCompanyJson": 27000,
+
+	"NameThirdCompanyJson": "Google",
+	"NumberOfEmployeesThirdCompanyJson": 16906
+}
+//{
+//	"Companies": [
+//		{
+//			"Name": "Microsoft",
+//			"Employees": 12567
+//		},
+//		{
+//			"Name": "Apple",
+//			"Employees": 27000
+//		},
+//		{
+//			"Name": "Google",
+//			"Employees": 16906
+//		}
+//	]
+//}
