@@ -3,13 +3,10 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.Extensions.Configuration.Ini;
-using Microsoft.Extensions.Configuration.Json;
-using Microsoft.Extensions.Configuration.Xml;
+using AspNet_Configuration_task1;
+using Newtonsoft.Json;
+using System.Xml;
 
 namespace AspNet_Configuration
 {
@@ -17,7 +14,12 @@ namespace AspNet_Configuration
     {
         public IConfiguration AppConfig { get; set; }
 
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        public void ConfigureServices(IServiceCollection services)
+        {
+            services.AddTransient<IEmployeeService, EmployeeService>();
+        }
+
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env, IEmployeeService employeeService)
         {
             var builder = new ConfigurationBuilder();
 
@@ -34,66 +36,95 @@ namespace AspNet_Configuration
                 app.UseDeveloperExceptionPage();
             }
 
-            app.Run(async (context) => 
+            app.Run((RequestDelegate)(async (context) => 
             {
-                var nameFirstCompanyIni = AppConfig["NameFirstCompanyIni"];
-                var numberOfEmployeesFirstCompanyIni = AppConfig["NumberOfEmployeesFirstCompanyIni"];
-
-                var nameSecondCompanyIni = AppConfig["NameSecondCompanyIni"];
-                var numberOfEmployeesSecondCompanyIni = AppConfig["NumberOfEmployeesSecondCompanyIni"];
-
-                var nameThirdCompanyIni = AppConfig["NameThirdCompanyIni"];
-                var numberOfEmployeesThirdCompanyIni = AppConfig["NumberOfEmployeesThirdCompanyIni"];
-
-                await context.Response.WriteAsync($"First company Ini: {nameFirstCompanyIni} - employeers: {numberOfEmployeesFirstCompanyIni}, " +
-                    $"Second company ini: {nameSecondCompanyIni} - employeers: {numberOfEmployeesSecondCompanyIni}, " +
-                    $"Third company ini: {nameThirdCompanyIni} - employeers: {numberOfEmployeesThirdCompanyIni} ");
-
-                var section1 = AppConfig.GetValue<int>("NumberOfEmployeesFirstCompanyIni");
-                var section2 = AppConfig.GetValue<int>("NumberOfEmployeesSecondCompanyIni");
-                var section3 = AppConfig.GetValue<int>("NumberOfEmployeesThirdCompanyIni");
-
-                if (section1 > section2 && section1 > section3)
+                Company firstCompanyIni = new Company()
                 {
-                    await context.Response.WriteAsync($" More employeers Ini: {nameFirstCompanyIni}");
-                }
-                if (section2 > section3 && section2 > section1)
+                    Name = AppConfig["NameFirstCompanyIni"],
+                    Employees = AppConfig.GetValue<int>("NumberOfEmployeesFirstCompanyIni")
+                };
+                Company secondCompanyIni = new Company()
                 {
-                    await context.Response.WriteAsync($" More employeers Ini: {nameSecondCompanyIni} ");
-                }
-                else
+                    Name = AppConfig["NameSecondCompanyIni"],
+                    Employees = AppConfig.GetValue<int>("NumberOfEmployeesSecondCompanyIni")
+                };
+                Company thirdCompanyIni = new Company()
                 {
-                    await context.Response.WriteAsync($" More employeers Ini: {nameThirdCompanyIni} ");
-                }
+                    Name = AppConfig["NameThirdCompanyIni"],
+                    Employees = AppConfig.GetValue<int>("NumberOfEmployeesThirdCompanyIni")
+                };
 
+                List<Company> listCompaniesIni = new List<Company>() { firstCompanyIni, secondCompanyIni, thirdCompanyIni };
 
-                var nameFirstCompanyJson = AppConfig["NameFirstCompanyJson"];
-                var numberOfEmployeesFirstCompanyJson = AppConfig["NumberOfEmployeesFirstCompanyJson"];
-               
-                var nameSecondCompanyJson = AppConfig["NameSecondCompanyJson"];
-                var numberOfEmployeesSecondCompanyJson = AppConfig["NumberOfEmployeesSecondCompanyJson"];
+                var companyNameIni = employeeService.GetCompanyName(listCompaniesIni);
 
-                var nameThirdCompanyJson = AppConfig["NameThirdCompanyJson"];
-                var numberOfEmployeesThirdCompanyJson = AppConfig["NumberOfEmployeesThirdCompanyJson"];
+                await context.Response.WriteAsync($" More employeers Ini: {companyNameIni}");
 
-                await context.Response.WriteAsync($"First company Json: {nameFirstCompanyJson} - employeers: {numberOfEmployeesFirstCompanyJson}, " +
-                    $"Second company json: {nameSecondCompanyJson} - employeers: {numberOfEmployeesSecondCompanyJson}, " +
-                    $"Third company json: {nameThirdCompanyJson} - employeers: {numberOfEmployeesThirdCompanyJson} ");
+                string json3 = JsonConvert.SerializeObject(listCompaniesIni);
 
+                await context.Response.WriteAsync(json3);
 
-                var nameFirstCompanyXml = AppConfig["NameFirstCompanyXml"];
-                var numberOfEmployeesFirstCompanyXml = AppConfig["NumberOfEmployeesFirstCompanyXml"];
+              
+                Company firstCompanyJson = new Company()
+                {
+                    Name = AppConfig["NameFirstCompanyJson"],
+                    Employees = AppConfig.GetValue<int>("NumberOfEmployeesFirstCompanyJson")
+                };
+                Company secondCompanyJson = new Company()
+                {
+                    Name = AppConfig["NameSecondCompanyJson"],
+                    Employees = AppConfig.GetValue<int>("NumberOfEmployeesSecondCompanyJson")
+                };
+                Company thirdCompanyJson = new Company()
+                {
+                    Name = AppConfig["NameThirdCompanyJson"],
+                    Employees = AppConfig.GetValue<int>("NumberOfEmployeesThirdCompanyJson")
+                };
 
-                var nameSecondCompanyXml = AppConfig["NameSecondCompanyXml"];
-                var numberOfEmployeesSecondCompanyXml = AppConfig["NumberOfEmployeesSecondCompanyXml"];
+                List<Company> listCompaniesJson = new List<Company>() { firstCompanyJson, secondCompanyJson, thirdCompanyJson };
 
-                var nameThirdCompanyXml = AppConfig["NameFirstCompanyXml"];
-                var numberOfEmployeesThirdCompanyXml = AppConfig["NumberOfEmployeesFirstCompanyXml"];
+                string json = JsonConvert.SerializeObject(listCompaniesJson);
 
-                await context.Response.WriteAsync($"First company Xml: {nameFirstCompanyXml} - employeers: {numberOfEmployeesFirstCompanyXml}, " +
-                    $"Second company json: {nameSecondCompanyXml} - employeers: {numberOfEmployeesSecondCompanyXml}, " +
-                    $"Third company json: {nameThirdCompanyXml} - employeers: {numberOfEmployeesThirdCompanyXml} ");
-            });
+                var companyNameJson = employeeService.GetCompanyName(listCompaniesJson);
+
+                await context.Response.WriteAsync($" More employeers Json: {companyNameJson}");
+
+                await context.Response.WriteAsync(json);
+
+                
+                Company firstCompanyXml = new Company()
+                {
+                    Name = AppConfig["NameFirstCompanyXml"],
+                    Employees = AppConfig.GetValue<int>("NumberOfEmployeesFirstCompanyXml")
+                };
+                Company secondCompanyXml = new Company()
+                {
+                    Name = AppConfig["NameSecondCompanyXml"],
+                    Employees = AppConfig.GetValue<int>("NumberOfEmployeesSecondCompanyXml")
+                };
+                Company thirdCompanyXml = new Company()
+                {
+                    Name = AppConfig["NameThirdCompanyXml"],
+                    Employees = AppConfig.GetValue<int>("NumberOfEmployeesThirdCompanyXml")
+                };
+
+                List<Company> listCompaniesXml = new List<Company>() { firstCompanyXml, secondCompanyXml, thirdCompanyXml };
+
+                string json2 = JsonConvert.SerializeObject(listCompaniesXml);
+
+                var companyNameXml = employeeService.GetCompanyName(listCompaniesXml);
+
+                await context.Response.WriteAsync($" More employeers Xml: {companyNameXml}");
+
+                await context.Response.WriteAsync(json2);
+            }));
         }
+    }
+
+    public class Company
+    {
+        public string Name { get; set; }
+
+        public int Employees { get; set; }
     }
 }
