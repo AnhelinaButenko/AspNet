@@ -1,0 +1,33 @@
+{
+	"Profiles": [
+		{
+			"Name": "Anhelina",
+			"LastName": "Butenko",
+			"Id": 1
+		},
+		{
+			"Name": "Andrew",
+			"LastName": "Turyansky",
+			"Id": 2
+		},
+		{
+			"Name": "Ivan",
+			"LastName": "Ivanov",
+			"Id": 3
+		},
+		{
+			"Name": "Stepan",
+			"LastName": "Stepannov",
+			"Id": 4
+		},
+		{
+			"Name": "Danil",
+			"LastName": "Danilov",
+			"Id": 5
+		},
+		{
+			"Name": "Inna",
+			"LastName": "Ivanova"
+		}
+	]
+}
